@@ -6,7 +6,7 @@
 /*   By: sejeong <sejeong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/31 20:06:57 by sejeong           #+#    #+#             */
-/*   Updated: 2022/01/06 15:27:16 by sejeong          ###   ########seoul.kr  */
+/*   Updated: 2022/01/06 15:40:13 by sejeong          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 char	*read_from_buffer(int fd, char *str)
 {
 	char	*buffer;
-	size_t	num_read;
+	int		num_read;
 
 	num_read = -1;
 	buffer = malloc(BUFFER_SIZE * sizeof(char) + 1);
@@ -81,7 +81,7 @@ char	*free_up(char *str)
 	while (str[i])
 		new_str[j++] = str[i++];
 	new_str[j] = '\0';
-	free(left_str);
+	free(str);
 	return (new_str);
 }
 
