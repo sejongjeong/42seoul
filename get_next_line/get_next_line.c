@@ -6,7 +6,7 @@
 /*   By: sejeong <sejeong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/31 20:06:57 by sejeong           #+#    #+#             */
-/*   Updated: 2022/01/06 15:40:13 by sejeong          ###   ########seoul.kr  */
+/*   Updated: 2022/01/06 15:42:15 by sejeong          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ char	*free_up(char *str)
 	if (!new_str)
 		return (0);
 	i++;
+	j = 0;
 	while (str[i])
 		new_str[j++] = str[i++];
 	new_str[j] = '\0';
