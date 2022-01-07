@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sejeong <sejeong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/31 20:06:57 by sejeong           #+#    #+#             */
-/*   Updated: 2022/01/08 03:51:29 by sejeong          ###   ########.fr       */
+/*   Created: 2022/01/07 12:55:05 by sejeong           #+#    #+#             */
+/*   Updated: 2022/01/08 03:51:35 by sejeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <unistd.h>
 
 char	*read_from_buffer(int fd, char *str)
@@ -91,15 +91,15 @@ char	*free_up(char *str)
 
 char	*get_next_line(int fd)
 {
-	static char	*str;
+	static char	*str[OPEN_MAX];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
-	str = read_from_buffer(fd, str);
-	if (!str)
+	str[fd] = read_from_buffer(fd, str[fd]);
+	if (!str[fd])
 		return (0);
-	line = get_line(str);
-	str = free_up(str);
+	line = get_line(str[fd]);
+	str[fd] = free_up(str[fd]);
 	return (line);
 }
