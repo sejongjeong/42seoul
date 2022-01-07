@@ -6,7 +6,7 @@
 /*   By: sejeong <sejeong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/31 20:06:57 by sejeong           #+#    #+#             */
-/*   Updated: 2022/01/07 13:08:45 by sejeong          ###   ########.fr       */
+/*   Updated: 2022/01/08 03:48:03 by sejeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,10 @@ char	*free_up(char *str)
 	}
 	new_str = malloc((ft_strlen(str) - i + 1) * sizeof(char));
 	if (!new_str)
+	{
+		free(str);
 		return (0);
+	}
 	i++;
 	j = 0;
 	while (str[i])
