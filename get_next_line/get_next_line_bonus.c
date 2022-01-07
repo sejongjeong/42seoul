@@ -6,7 +6,7 @@
 /*   By: sejeong <sejeong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 12:55:05 by sejeong           #+#    #+#             */
-/*   Updated: 2022/01/07 13:08:48 by sejeong          ###   ########.fr       */
+/*   Updated: 2022/01/07 13:38:50 by sejeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,6 @@ char	*get_next_line(int fd)
 	if (!str[fd])
 		return (0);
 	line = get_line(str[fd]);
-	str = free_up(str[fd]);
+	str[fd] = free_up(str[fd]);
 	return (line);
 }
