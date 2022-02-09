@@ -6,7 +6,7 @@
 /*   By: sejeong <sejeong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 04:22:04 by sejeong           #+#    #+#             */
-/*   Updated: 2022/02/09 18:34:48 by sejeong          ###   ########.fr       */
+/*   Updated: 2022/02/09 20:25:25 by sejeong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ int	arg_p(unsigned long long int addr)
 
 	if (!addr)
 	{
-		ft_putstr_fd("(nil)", 1);
-		bytes = 5;
+		ft_putstr_fd("0x0", 1);
+		bytes = 3;
 		return (bytes);
 	}
 	ft_putstr_fd("0x", 1);
