@@ -5,79 +5,87 @@
 #                                                     +:+ +:+         +:+      #
 #    By: sejeong <sejeong@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/01/07 18:12:36 by sejeong           #+#    #+#              #
-#    Updated: 2022/02/09 19:02:13 by sejeong          ###   ########.fr        #
+#    Created: 2022/02/17 10:32:13 by sejeong           #+#    #+#              #
+#    Updated: 2022/03/03 03:32:13 by sejeong          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+SHELL		=	/bin/bash
+
 NAME		= push_swap
-BNAME 		= checker
+BNAME		= checker
+INC			= inc
+HEADER		= -I inc
+LIBFT		= libft
+SRC_DIR		= src/
+OBJ_DIR		= obj/
+CC			= gcc
+CFLAGS		= -Wall -Werror -Wextra -g
+RM			= rm -f
 
-LIB_PATH 	= ./includes
-LIBFT_DIR	= ./libft
-LIBFT		= $(LIBFT_DIR)/libft.a
-LIBFTPRINTF = ${LIB_PATH}/push_swap.h
+PSW_DIR		=	push_swap/
+MAND_FILES	=	push_swap sortage quicksort
+COMM_DIR	=	common/
+COMM_FILES	=	swap_moves rotation_moves rev_rot_moves push_moves utils
+BONUS_DIR	=	bonus/
+BONUS_FILES	=	checker bonus_utils
 
-CC 		= gcc
+SRC_FILES	=	$(addprefix $(PSW_DIR), $(MAND_FILES))
+COM_FILES	=	$(addprefix $(COMM_DIR), $(COMM_FILES))
+SRC_BFILES	=	$(addprefix $(BONUS_DIR), $(BONUS_FILES))
 
-FLAGS 		= -Wall -Werror -Wextra
+SRC 		= 	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
+OBJ 		= 	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
 
-REMOVE 		= rm -f
-INCLUDE 	= -I ${LIB_PATH}
+COMMON 		= 	$(addprefix $(SRC_DIR), $(addsuffix .c, $(COM_FILES)))
+COBJ 		= 	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(COM_FILES)))
 
-SRCS_PATH	= ./srcs
-SRCS_CPATH 	= ./srcs/co
-SRCS_BPATH	= ./srcs/checker
+BSRC		=	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_BFILES)))
+BOBJ 		= 	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_BFILES)))
 
-SRCS 		=	${SRCS_PATH}/push_swap.c	\
-				${SRCS_PATH}/quick_sort.c	\
-				${SRCS_PATH}/sort.c
+OBJF		=	.cache_exists
 
-SRCS_CO		=	${SRCS_CPATH}/push.c		\
-				${SRCS_CPATH}/rotate.c		\
-				${SRCS_CPATH}/rrotate.c		\
-				${SRCS_CPATH}/swap.c		\
-				${SRCS_CPATH}/utils.c		\
+start:
+		make all
 
-SRCS_CHECKER=	${SRCS_BPATH}/checker.c		\
-				${SRCS_BPATH}/checker_utils.c
+all:		$(NAME)
 
+$(NAME):	$(OBJ) $(COBJ) $(OBJF)
+			make -C $(LIBFT)
+			cp libft/libft.a .
+			$(CC) $(CFLAGS) $(OBJ) $(COBJ) $(HEADER) libft.a -o $(NAME)
 
-				
-OBJS 		= $(SRCS:.c=.o)
-OBJS_CO		= $(SRCS_CO:.c=.o)
-OBJS_CHECKER= $(SRCS_CHECKER:.c=.o)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(OBJF)
+			$(CC) $(CFLAGS) $(HEADER) -c $< -o $@
 
-all:		${NAME}
-
-${NAME}: 	${OBJS} ${OBJS_CO} ${LIBFT}
-		ar rcs ${NAME} ${OBJS} ${OBJS_CO}
-
-${LIBFT}:
-		make -C $(LIBFT_DIR)
-		cp ${LIBFT} ${NAME}
-
-${BNAME}:	${OBJS_CHECKER} ${OBJS_CO} ${BLIBFT}
-		ar rcs ${BNAME} ${OBJS_CHECKER} ${OBJS_CO}
-
-${BLIBFT}:
-		make -C $(LIBFT_DIR)
-		cp ${BLIBFT} ${BNAME}
-
-.c.o:
-		${CC} -c ${FLAGS} $< -o ${<:.c=.o} ${INCLUDE} 
-
+$(OBJF):
+			mkdir -p $(OBJ_DIR)
+			mkdir -p $(OBJ_DIR)$(PSW_DIR)
+			mkdir -p $(OBJ_DIR)$(COMM_DIR)
+			mkdir -p $(OBJ_DIR)$(BONUS_DIR)
+			touch $(OBJF)
 
 clean:
-		make clean -C $(LIBFT_DIR)
-		${REMOVE} ${OBJS} ${OBJS_CO} ${OBJS_CHECKER}
+			$(RM) -r $(OBJ_DIR)
+			make clean -C $(LIBFT)
+			$(RM) $(OBJF)
 
-fclean:	clean
-		make fclean -C $(LIBFT_DIR)
-		${REMOVE} ${NAME} ${BNAME}
+fclean:		clean
+			$(RM) $(NAME)
+			$(RM) $(BNAME)
+			$(RM) libft.a
+			$(RM) $(LIBFT)/libft.a
 
-re :	fclean all
+re:			fclean all
 
-bonus: checker
+bonus:
+		make allbonus
 
-.PHONY:	all checker bonus clean fclean re
+allbonus:		$(BNAME)
+
+$(BNAME):	$(BOBJ) $(COBJ)
+			make -C $(LIBFT)
+			cp libft/libft.a .
+			$(CC) $(CFLAGS) $(BSRC) $(COMMON) $(HEADER) libft.a -o $(BNAME)
+
+.PHONY:		all clean fclean re

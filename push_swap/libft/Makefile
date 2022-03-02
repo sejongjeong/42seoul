@@ -5,52 +5,85 @@
 #                                                     +:+ +:+         +:+      #
 #    By: sejeong <sejeong@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/06/12 18:49:02 by sejeong           #+#    #+#              #
-#    Updated: 2021/06/18 17:59:55 by sejeong          ###   ########.fr        #
+#    Created: 2021/09/03 03:37:12 by sejeong           #+#    #+#              #
+#    Updated: 2022/03/03 03:37:12 by sejeong          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-.SUFFIXES : .c .o
+SHELL		=	/bin/bash
 
-NAME = libft.a
-CC = gcc
-CFLAG = -Wall -Wextra -Werror
-SRCS =	ft_strlen.c			\
-		ft_strchr.c			\
-		ft_split.c			\
-		ft_putchar_fd.c		\
-		ft_putstr_fd.c		\
-		ft_putendl_fd.c		\
-		ft_putnbr_fd.c		\
-		arg_c.c				\
-		arg_p.c				\
-		arg_per.c			\
-		arg_s.c				\
-		arg_u.c				\
-		args_d_i.c			\
-		args_x.c			\
-		ft_printf.c			\
-		hexa_conv.c			\
-		utils.c				\
-		get_next_line.c		\
-		get_next_line_utils.c
+#Standard
 
-OBJS = $(SRCS:%.c=%.o)
+NAME		=	libft.a
+INCLUDE		=	inc/
+SRC_DIR 	=	src/
+OBJ_DIR		=	obj/
+CC			=	gcc
+CFLAGS		=	-Wall -Werror -Wextra -I
+RM			=	rm -f
+AR			=	ar rcs
+ECHO		=	echo -e
 
-all : $(NAME)
+#Sources
 
-$(NAME) : $(OBJS)
-	ar rc $@ $^
+FTSTR_DIR	=	ft_str/
+FTSTR		=	ft_split  \
+				ft_strlen \
+				ft_strchr \
+				ft_strcmp
 
-%.o : %.c
-	$(CC) $(CFLAG) -c $< -o $@
+FTPUT_DIR	=	ft_put/
+FTPUT		=	ft_putchar_fd ft_putstr_fd				
 
-clean :
-	rm -f $(OBJS)
+FTTO_DIR	=	ft_to/
+FTTO		=	ft_itoa
 
-fclean : clean
-	rm -f $(NAME)
+GNL_DIR		=	gnl/
+GNL			=	get_next_line get_next_line_utils
 
-re : fclean all
+FTPRINTF_DIR	= ft_printf/
+FTPRINTF	=	ft_printf ft_printf_utils ft_print_hex ft_print_ptr ft_print_unsigned
 
- .PHONY : all clean fclean re
+SRC_FILES+=$(addprefix $(FTTO_DIR),$(FTTO))
+SRC_FILES+=$(addprefix $(FTSTR_DIR),$(FTSTR))
+SRC_FILES+=$(addprefix $(GNL_DIR),$(GNL))
+SRC_FILES+=$(addprefix $(FTPUT_DIR),$(FTPUT))
+SRC_FILES+=$(addprefix $(FTPRINTF_DIR),$(FTPRINTF))
+
+SRC 		= 	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
+OBJ 		= 	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
+
+###
+
+OBJF		=	.cache_exists
+
+start:
+		make all
+
+all:		$(NAME)
+
+$(NAME):	$(OBJ)
+			$(AR) $(NAME) $(OBJ)
+
+$(OBJ_DIR)%.o : $(SRC_DIR)%.c | $(OBJF)
+			$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+$(OBJF):
+			mkdir -p $(OBJ_DIR)
+			mkdir -p $(OBJ_DIR)$(FTTO_DIR)
+			mkdir -p $(OBJ_DIR)$(FTSTR_DIR)
+			mkdir -p $(OBJ_DIR)$(GNL_DIR)
+			mkdir -p $(OBJ_DIR)$(FTPUT_DIR)
+			mkdir -p $(OBJ_DIR)$(FTPRINTF_DIR)
+			touch $(OBJF)
+
+clean:
+			$(RM) -r $(OBJ_DIR)
+			$(RM) $(OBJF)
+
+fclean:		clean
+			$(RM) $(NAME)
+
+re:			fclean all
+
+.PHONY:		all clean fclean re
